@@ -1372,7 +1372,8 @@ export const filterItems = (
     }
 
     if (filters.minCo2Saving && filters.minCo2Saving > 0) {
-        result = result.filter(item => item.co2SavingKg && item.co2SavingKg >= filters.minCo2Saving);
+        const minSaving = filters.minCo2Saving;
+        result = result.filter(item => item.co2SavingKg && item.co2SavingKg >= minSaving);
     }
 
     // Sort
