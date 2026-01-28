@@ -72,7 +72,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "12 uur geleden",
         availability: "direct",
         co2SavingKg: 45,
-        imageUrl: null,
+        imageUrl: "https://xa5knx407r.cloudimg.io/https://xa5knx407r.cloudimg.io/https://www.sleiderink.nl/media/catalog/product/cache/763206d4bb1e1a7b8f656eb5ed95cc58/v/u/vuren_geschaafd_63x175.jpg",
     },
     {
         id: "h002",
@@ -97,7 +97,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "2 dagen geleden",
         availability: "direct",
         co2SavingKg: 62,
-        imageUrl: null,
+        imageUrl: "https://www.webo.nl/wp-content/uploads/Eiken-Kozijn%C2%AE-transparant-1.png",
     },
     {
         id: "h003",
@@ -122,7 +122,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "6 uur geleden",
         availability: "direct",
         co2SavingKg: 28,
-        imageUrl: null,
+        imageUrl: "https://www.martenshout.be/assets/media/9066/conversions/thermowood-vurengrenen-22-x-150-mm-prod_xl.jpg",
     },
     {
         id: "h004",
@@ -147,7 +147,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "4 dagen geleden",
         availability: "direct",
         co2SavingKg: 85,
-        imageUrl: null,
+        imageUrl: "https://www.onlinetuinhout.nl/image/cache/catalog/02019-carp/azobe-ruw-paal-500x500.jpg",
     },
     {
         id: "h005",
@@ -172,7 +172,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "1 dag geleden",
         availability: "direct",
         co2SavingKg: 38,
-        imageUrl: null,
+        imageUrl: "https://vandouglashout.com/cdn/shop/files/Shou-sugi-ban-op-gevel.jpg?v=1759846202",
     },
     {
         id: "h006",
@@ -197,7 +197,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "3 dagen geleden",
         availability: "direct",
         co2SavingKg: 120,
-        imageUrl: null,
+        imageUrl: "https://cdn.webshopapp.com/shops/47685/files/438816490/tradi-eco-vaste-trap-recht-beukenhout-80-cm-breed.jpg",
     },
     {
         id: "h007",
@@ -222,7 +222,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "1 week geleden",
         availability: "op_aanvraag",
         co2SavingKg: 95,
-        imageUrl: null,
+        imageUrl: "https://www.dekozijnenman.frl/wp-content/uploads/2021/12/kozijn_f_draai-uitzet.jpg",
     },
     {
         id: "h008",
@@ -247,7 +247,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "5 uur geleden",
         availability: "direct",
         co2SavingKg: 185,
-        imageUrl: null,
+        imageUrl: "https://passiefhuismarkt.nl/wp-content/uploads/2019/07/gordingen-spanten.jpg",
     },
     {
         id: "h009",
@@ -272,7 +272,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "8 uur geleden",
         availability: "direct",
         co2SavingKg: 52,
-        imageUrl: null,
+        imageUrl: "https://www.floorsite.nl/wp-content/uploads/2021/01/Massief-eiken-rustiek-24cm-breed-2-300x247.png",
     },
     {
         id: "h010",
@@ -297,7 +297,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "2 dagen geleden",
         availability: "direct",
         co2SavingKg: 15,
-        imageUrl: null,
+        imageUrl: "https://static.karwei.nl/dam/205760/123",
     },
     {
         id: "h011",
@@ -347,7 +347,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "4 uur geleden",
         availability: "direct",
         co2SavingKg: 24,
-        imageUrl: null,
+        imageUrl: "https://cdn.webshopapp.com/shops/34832/files/96527162/650x650x2/okoume-watervast-multiplex-blank-18mm-2500x1220mm.jpg",
     },
 
     // STEEN - 12 items
