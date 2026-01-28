@@ -1355,7 +1355,8 @@ export const filterItems = (
     }
 
     if (filters.maxDistance) {
-        result = result.filter(item => item.distanceKm <= filters.maxDistance);
+        const maxDist = filters.maxDistance;
+        result = result.filter(item => item.distanceKm <= maxDist);
     }
 
     if (filters.availability && filters.availability !== "all") {
