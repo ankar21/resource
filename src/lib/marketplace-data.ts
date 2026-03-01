@@ -247,7 +247,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "5 uur geleden",
         availability: "direct",
         co2SavingKg: 185,
-        imageUrl: "/images/marketplace/vuren-dakspanten.jpg",
+        imageUrl: "/images/marketplace/dak-met-gordingen-en-spanten.jpg",
     },
     {
         id: "h009",
@@ -347,7 +347,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "4 uur geleden",
         availability: "direct",
         co2SavingKg: 24,
-        imageUrl: "/images/marketplace/multiplex-watervast.jpg",
+        imageUrl: "/images/marketplace/0017.-MULTIPLEX-GEGROND-122X244CM-X-9MM-e1512220710482.jpg",
     },
 
     // STEEN - 12 items
@@ -1080,7 +1080,7 @@ export const marketplaceItems: MarketplaceItem[] = [
         lastUpdated: "2 dagen geleden",
         availability: "direct",
         co2SavingKg: 75,
-        imageUrl: "/images/marketplace/airco-split-unit.jpg",
+        imageUrl: "/images/marketplace/aux-q-smart-grijs-single-split.webp",
     },
     {
         id: "i004",
