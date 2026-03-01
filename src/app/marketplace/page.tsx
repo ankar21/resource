@@ -32,8 +32,13 @@ function ItemCard({ item, index }: { item: MarketplaceItem; index: number }) {
                 <Card className="h-full bg-card border-border/50 transition-all duration-150 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
                     <CardContent className="p-4">
                         {/* Thumbnail placeholder */}
-                        <div className="aspect-[4/3] bg-muted/50 rounded-lg mb-4 flex items-center justify-center">
-                            <span className="text-muted-foreground text-sm">Geen afbeelding</span>
+                        <div className="aspect-[4/3] bg-muted/50 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            {item.imageUrl ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+                            ) : (
+                                <span className="text-muted-foreground text-sm">Geen afbeelding</span>
+                            )}
                         </div>
 
                         {/* Title */}

@@ -45,8 +45,13 @@ export default async function ItemDetailPage({ params }: PageProps) {
                     <div className="grid lg:grid-cols-2 gap-8">
                         {/* Gallery */}
                         <div>
-                            <div className="aspect-[4/3] bg-muted/50 rounded-2xl flex items-center justify-center mb-4">
-                                <span className="text-muted-foreground">Geen afbeelding beschikbaar</span>
+                            <div className="aspect-[4/3] bg-muted/50 rounded-2xl flex items-center justify-center mb-4 overflow-hidden">
+                                {item.imageUrl ? (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
+                                ) : (
+                                    <span className="text-muted-foreground">Geen afbeelding beschikbaar</span>
+                                )}
                             </div>
                             <div className="grid grid-cols-4 gap-2">
                                 {Array.from({ length: 4 }).map((_, i) => (
