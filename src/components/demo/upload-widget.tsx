@@ -7,12 +7,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Upload, FileText, Check, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function UploadWidget() {
     const router = useRouter();
     const [isDragging, setIsDragging] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [processingStep, setProcessingStep] = useState(0);
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
@@ -61,9 +63,18 @@ export function UploadWidget() {
         router.push("/demo/processing?source=sample");
     };
 
-    const handleProcess = () => {
+    const handleProcess = async () => {
         if (!file) return;
         setIsAnalyzing(true);
+
+        // Simulate delightful status steps
+        setProcessingStep(1); // Inlezen
+        await new Promise(r => setTimeout(r, 800));
+        setProcessingStep(2); // Matchen met database
+        await new Promise(r => setTimeout(r, 1200));
+        setProcessingStep(3); // Rapport genereren
+        await new Promise(r => setTimeout(r, 800));
+
         // Redirect to processing flow with upload source
         router.push("/demo/processing?source=upload");
     };
@@ -72,15 +83,15 @@ export function UploadWidget() {
         <div className="w-full max-w-xl mx-auto space-y-6">
             <Card
                 className={cn(
-                    "border-2 border-dashed transition-all duration-200",
-                    isDragging ? "border-primary bg-primary/5 scale-[1.01]" : "border-border",
+                    "relative overflow-hidden border-2 border-dashed transition-all duration-300",
+                    isDragging ? "border-primary bg-primary/5 shadow-[0_0_30px_rgba(22,163,74,0.15)] scale-[1.02]" : "border-border",
                     "hover:border-primary/50"
                 )}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
             >
-                <CardContent className="flex flex-col items-center justify-center py-12 text-center h-[300px] relative">
+                <CardContent className="flex flex-col items-center justify-center py-12 text-center min-h-[300px] relative z-10">
                     <input
                         type="file"
                         id="file-upload"
@@ -93,7 +104,7 @@ export function UploadWidget() {
                     {!file ? (
                         <>
                             <div className="rounded-full bg-primary/10 p-4 mb-4">
-                                <Upload className="h-8 w-8 text-primary" />
+                                <Upload className={cn("h-8 w-8 text-primary transition-all duration-300", isDragging && "scale-110 -translate-y-1")} />
                             </div>
                             <h3 className="text-lg font-semibold mb-2">Sleep je bestand hierheen</h3>
                             <p className="text-muted-foreground text-sm mb-6">Of selecteer een .xlsx of .csv bestand</p>
@@ -113,35 +124,87 @@ export function UploadWidget() {
                             </div>
                         </>
                     ) : (
-                        <div className="w-full animate-in fade-in zoom-in duration-300">
-                            <div className="rounded-full bg-green-100 p-4 mb-4 inline-flex">
-                                <FileText className="h-8 w-8 text-green-600" />
-                            </div>
-                            <h3 className="text-lg font-semibold mb-1 truncate max-w-sm mx-auto">{file.name}</h3>
-                            <p className="text-sm text-muted-foreground mb-6">
-                                {(file.size / 1024).toFixed(1)} KB • Klaar voor analyse
-                            </p>
-
-                            <div className="flex flex-col gap-3 max-w-xs mx-auto">
-                                <Button onClick={handleProcess} disabled={isAnalyzing} className="w-full text-lg h-12">
-                                    {isAnalyzing ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                            Starten...
-                                        </>
-                                    ) : (
-                                        "Start Analyse"
-                                    )}
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    onClick={() => setFile(null)}
-                                    disabled={isAnalyzing}
-                                    className="text-muted-foreground hover:text-destructive"
+                        <div className="w-full relative px-4">
+                            {/* Scanning Animation overlay */}
+                            {isAnalyzing && processingStep < 3 && (
+                                <motion.div
+                                    className="absolute inset-0 z-20 pointer-events-none rounded-xl overflow-hidden"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
                                 >
-                                    Verwijder bestand
-                                </Button>
+                                    <motion.div
+                                        className="h-1 bg-primary shadow-[0_0_15px_rgba(22,163,74,0.8)] w-full absolute left-0 right-0"
+                                        animate={{ top: ['0%', '100%', '0%'] }}
+                                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                    />
+                                    <div className="absolute inset-0 bg-primary/5 dark:bg-primary/10 animate-pulse" />
+                                </motion.div>
+                            )}
+
+                            <div className={cn("relative z-10 transition-all duration-300", isAnalyzing && "scale-[0.98] opacity-60")}>
+                                <div className="rounded-full bg-green-100 p-4 mb-4 inline-flex relative overflow-hidden">
+                                    <FileText className="h-8 w-8 text-green-600 relative z-10" />
+                                </div>
+                                <h3 className="text-lg font-semibold mb-1 truncate max-w-sm mx-auto">{file.name}</h3>
+                                <p className="text-sm text-muted-foreground mb-6">
+                                    {(file.size / 1024).toFixed(1)} KB • Klaar voor analyse
+                                </p>
+
+                                {!isAnalyzing && (
+                                    <div className="flex flex-col gap-3 max-w-xs mx-auto">
+                                        <Button onClick={handleProcess} className="w-full text-lg h-12">
+                                            Start Analyse
+                                        </Button>
+                                        <Button
+                                            variant="ghost"
+                                            onClick={() => setFile(null)}
+                                            className="text-muted-foreground hover:text-destructive"
+                                        >
+                                            Andere file kiezen
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
+
+                            {/* Status Steps showing up during analysis */}
+                            <AnimatePresence>
+                                {isAnalyzing && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0, y: 10 }}
+                                        animate={{ opacity: 1, height: 'auto', y: 0 }}
+                                        className="mt-6 space-y-3 text-sm text-left mx-auto max-w-[220px] relative z-30 bg-background/80 backdrop-blur-sm p-4 rounded-xl border shadow-sm"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            {processingStep > 1 ? (
+                                                <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center"><Check className="h-3 w-3 text-primary" /></div>
+                                            ) : (
+                                                <div className="h-5 w-5 flex items-center justify-center"><Loader2 className="h-3 w-3 animate-spin text-primary" /></div>
+                                            )}
+                                            <span className={processingStep >= 1 ? "text-foreground font-medium" : "text-muted-foreground"}>Inlezen data</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            {processingStep > 2 ? (
+                                                <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center"><Check className="h-3 w-3 text-primary" /></div>
+                                            ) : processingStep === 2 ? (
+                                                <div className="h-5 w-5 flex items-center justify-center"><Loader2 className="h-3 w-3 animate-spin text-primary" /></div>
+                                            ) : (
+                                                <div className="h-5 w-5 flex items-center justify-center"><div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" /></div>
+                                            )}
+                                            <span className={processingStep >= 2 ? "text-foreground font-medium" : "text-muted-foreground"}>Partners matchen</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            {processingStep > 3 ? (
+                                                <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center"><Check className="h-3 w-3 text-primary" /></div>
+                                            ) : processingStep === 3 ? (
+                                                <div className="h-5 w-5 flex items-center justify-center"><Loader2 className="h-3 w-3 animate-spin text-primary" /></div>
+                                            ) : (
+                                                <div className="h-5 w-5 flex items-center justify-center"><div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" /></div>
+                                            )}
+                                            <span className={processingStep >= 3 ? "text-foreground font-medium" : "text-muted-foreground"}>Rapport genereren</span>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     )}
                 </CardContent>

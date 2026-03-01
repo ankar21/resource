@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Search, MapPin, Leaf, Check, Info, ArrowRight, Filter, X } from "lucide-react";
+import { Search, MapPin, Leaf, Check, Info, ArrowRight, Filter, X, Settings2 } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { marketplaceItems, getCategories, filterItems, type MarketplaceItem } from "@/lib/marketplace-data";
 
 function ItemCard({ item, index }: { item: MarketplaceItem; index: number }) {
@@ -29,7 +30,7 @@ function ItemCard({ item, index }: { item: MarketplaceItem; index: number }) {
             transition={{ duration: 0.2, delay: index * 0.03 }}
         >
             <Link href={`/marketplace/item/${item.slug}`}>
-                <Card className="h-full bg-card border-border/50 transition-all duration-150 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+                <Card className="group/card h-full bg-card border-border/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 cursor-pointer hover:border-primary/20">
                     <CardContent className="p-4">
                         {/* Thumbnail placeholder */}
                         <div className="aspect-[4/3] bg-muted/50 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
@@ -66,13 +67,16 @@ function ItemCard({ item, index }: { item: MarketplaceItem; index: number }) {
                         </div>
 
                         {/* CO2 & Price row */}
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between mt-auto pt-2">
                             {item.co2SavingKg ? (
-                                <div className="flex items-center text-sm text-primary group relative">
-                                    <Leaf className="h-3.5 w-3.5 mr-1" />
-                                    -{item.co2SavingKg} kg CO₂
-                                    <Info className="h-3 w-3 ml-1 text-muted-foreground" />
-                                    <span className="absolute left-0 top-6 w-32 p-2 bg-popover border rounded-lg shadow-lg text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                                <div className="flex items-center text-sm text-primary group/tooltip relative">
+                                    <div className="relative flex items-center justify-center mr-1">
+                                        <Leaf className="h-4 w-4 transition-transform duration-300 group-hover/card:scale-110 relative z-10" />
+                                        <div className="absolute inset-0 bg-primary/20 rounded-full scale-0 group-hover/card:scale-150 group-hover/card:animate-ping opacity-0 group-hover/card:opacity-100 transition-all duration-700" />
+                                    </div>
+                                    <span className="font-medium">-{item.co2SavingKg} kg CO₂</span>
+                                    <Info className="h-3 w-3 ml-1 text-muted-foreground/60" />
+                                    <span className="absolute left-0 top-6 w-32 p-2 bg-popover border rounded-lg shadow-lg text-xs text-muted-foreground opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none z-10">
                                         Indicatieve CO₂-winst
                                     </span>
                                 </div>
@@ -139,6 +143,17 @@ export default function MarketplacePage() {
     const scrollToSearch = () => {
         document.getElementById("search-section")?.scrollIntoView({ behavior: "smooth" });
     };
+
+    // Active filters for chips
+    const activeFilters = useMemo(() => {
+        const filters = [];
+        if (category !== "all") filters.push({ id: "category", label: categories.find(c => c.value === category)?.label || category, onRemove: () => setCategory("all") });
+        if (maxDistance !== 200) filters.push({ id: "distance", label: `< ${maxDistance} km`, onRemove: () => setMaxDistance(200) });
+        if (availability !== "all") filters.push({ id: "availability", label: availability === "direct" ? "Meteen ophalen" : availability, onRemove: () => setAvailability("all") });
+        if (condition !== "all") filters.push({ id: "condition", label: `Conditie ${condition}`, onRemove: () => setCondition("all") });
+        if (verifiedOnly) filters.push({ id: "verified", label: "Verified Partners", onRemove: () => setVerifiedOnly(false) });
+        return filters;
+    }, [category, maxDistance, availability, condition, verifiedOnly, categories]);
 
     return (
         <div className="flex min-h-screen flex-col font-sans">
@@ -264,6 +279,41 @@ export default function MarketplacePage() {
                             </div>
                         </div>
 
+                        {/* Filter Chips */}
+                        <AnimatePresence>
+                            {activeFilters.length > 0 && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                                    animate={{ opacity: 1, height: "auto", marginTop: 16 }}
+                                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                    className="flex flex-wrap gap-2 overflow-hidden"
+                                >
+                                    <span className="text-sm text-muted-foreground flex items-center mr-2">
+                                        Actieve filters:
+                                    </span>
+                                    {activeFilters.map(filter => (
+                                        <motion.div
+                                            key={filter.id}
+                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.8 }}
+                                            transition={{ duration: 0.15 }}
+                                        >
+                                            <Badge variant="secondary" className="flex items-center gap-1 pl-2.5 pr-1 py-1 text-xs bg-primary/10 hover:bg-primary/20 text-primary border-primary/20 transition-colors cursor-pointer" onClick={filter.onRemove}>
+                                                {filter.label}
+                                                <div className="h-4 w-4 rounded-full flex items-center justify-center hover:bg-primary/20">
+                                                    <X className="h-2.5 w-2.5" />
+                                                </div>
+                                            </Badge>
+                                        </motion.div>
+                                    ))}
+                                    <Button variant="ghost" size="sm" className="h-6 text-xs text-muted-foreground px-2" onClick={() => { setCategory("all"); setMaxDistance(200); setAvailability("all"); setCondition("all"); setVerifiedOnly(false); }}>
+                                        Wissen
+                                    </Button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
                         {/* Mobile Filters Drawer */}
                         {showFilters && (
                             <motion.div
@@ -372,9 +422,25 @@ export default function MarketplacePage() {
                 <section className="py-8">
                     <div className="container">
                         <div className="flex items-center justify-between mb-6">
-                            <p className="text-sm text-muted-foreground">
-                                {filteredItems.length} van {marketplaceItems.length} artikelen
-                            </p>
+                            <div className="text-sm text-muted-foreground flex items-center gap-1.5">
+                                <div className="flex items-baseline gap-1 bg-muted/50 px-3 py-1.5 rounded-full border">
+                                    <AnimatePresence mode="popLayout">
+                                        <motion.span
+                                            key={filteredItems.length}
+                                            initial={{ opacity: 0, y: -15, filter: "blur(4px)" }}
+                                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                                            exit={{ opacity: 0, y: 15, filter: "blur(4px)" }}
+                                            transition={{ duration: 0.3, type: "spring", bounce: 0.4 }}
+                                            className="font-bold text-foreground text-base tabular-nums"
+                                        >
+                                            {filteredItems.length}
+                                        </motion.span>
+                                    </AnimatePresence>
+                                    <span>van de</span>
+                                    <span className="font-semibold">{marketplaceItems.length}</span>
+                                </div>
+                                <span className="hidden sm:inline">materialen gevonden</span>
+                            </div>
                         </div>
 
                         {isLoading ? (

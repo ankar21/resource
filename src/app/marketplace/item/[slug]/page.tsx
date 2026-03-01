@@ -5,8 +5,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin, Leaf, Check, ArrowLeft, Info, Plus, MessageSquare } from "lucide-react";
+import { MapPin, Leaf, Check, ArrowLeft, Info } from "lucide-react";
 import { getItemBySlug, marketplaceItems } from "@/lib/marketplace-data";
+import { ItemActions } from "@/components/marketplace/item-actions";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -89,16 +90,12 @@ export default async function ItemDetailPage({ params }: PageProps) {
                             </div>
 
                             {/* CTAs */}
-                            <div className="flex flex-col sm:flex-row gap-3 mb-8">
-                                <Button size="lg" className="flex-1">
-                                    <MessageSquare className="h-4 w-4 mr-2" />
-                                    Vraag beschikbaarheid aan
-                                </Button>
-                                <Button size="lg" variant="outline" className="flex-1">
-                                    <Plus className="h-4 w-4 mr-2" />
-                                    Voeg toe aan projectlijst
-                                </Button>
-                            </div>
+                            <ItemActions item={{
+                                title: item.title,
+                                quantity: item.quantity,
+                                unit: item.unit,
+                                source: item.source
+                            }} />
 
                             {/* Specs Table */}
                             <Card className="mb-6">
