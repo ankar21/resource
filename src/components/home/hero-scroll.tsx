@@ -147,17 +147,19 @@ export function HeroScroll({ children, className }: HeroScrollProps) {
 
                 let drawWidth, drawHeight, offsetX, offsetY;
 
-                // To simulate 'object-fit: cover', we want the image to completely cover the canvas
+                // To simulate 'object-fit: contain', we want the entire image to be visible
                 if (canvasRatio > imgRatio) {
+                    // Canvas is wider than image. Fit to height.
+                    drawHeight = canvas.height;
+                    drawWidth = canvas.height * imgRatio;
+                    offsetX = (canvas.width - drawWidth) / 2;
+                    offsetY = 0;
+                } else {
+                    // Canvas is taller than image. Fit to width.
                     drawWidth = canvas.width;
                     drawHeight = canvas.width / imgRatio;
                     offsetX = 0;
                     offsetY = (canvas.height - drawHeight) / 2;
-                } else {
-                    drawWidth = canvas.height * imgRatio;
-                    drawHeight = canvas.height;
-                    offsetX = (canvas.width - drawWidth) / 2;
-                    offsetY = 0;
                 }
 
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
